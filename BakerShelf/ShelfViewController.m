@@ -40,11 +40,17 @@
 #import "NSString+Extensions.h"
 #import "Utils.h"
 
+#import "UICustomTableViewCell.h"
+
+#define SHADOW_Y 107
+#define SHADOW_HEIGHT 69
+
 @implementation ShelfViewController
 
 @synthesize issues;
 @synthesize issueViewControllers;
-@synthesize gridView;
+//@synthesize gridView;
+@synthesize issueTableView;
 @synthesize subscribeButton;
 @synthesize refreshButton;
 @synthesize shelfStatus;
@@ -52,6 +58,8 @@
 @synthesize supportedOrientation;
 @synthesize blockingProgressView;
 @synthesize bookToBeProcessed;
+@synthesize shadow;
+@synthesize cellBackground;
 
 #pragma mark - Init
 
@@ -121,7 +129,7 @@
 
 - (void)dealloc
 {
-    [gridView release];
+//    [gridView release];
     [issueViewControllers release];
     [issues release];
     [subscribeButton release];
@@ -147,20 +155,30 @@
 {
     [super viewDidLoad];
 
-    self.navigationItem.title = NSLocalizedString(@"SHELF_NAVIGATION_TITLE", nil);
-
     self.background = [[UIImageView alloc] init];
+    self.cellBackground = [[UIImageView alloc] init];
 
-    self.gridView = [[AQGridView alloc] init];
-    self.gridView.dataSource = self;
-    self.gridView.delegate = self;
-    self.gridView.backgroundColor = [UIColor clearColor];
+    self.shadow = [[UIImageView alloc] init];
+    self.shadow.backgroundColor = [UIColor clearColor];
+    
+//    self.gridView = [[AQGridView alloc] init];
+//    self.gridView.dataSource = self;
+//    self.gridView.delegate = self;
+//    self.gridView.backgroundColor = [UIColor clearColor];
+    
+    self.issueTableView = [[UITableView alloc] init];
+    self.issueTableView.dataSource = self;
+    self.issueTableView.delegate = self;
+    self.issueTableView.backgroundColor = [UIColor clearColor];
 
     [self.view addSubview:self.background];
-    [self.view addSubview:self.gridView];
+//    [self.view addSubview:self.gridView];
+    [self.view addSubview:self.issueTableView];
+    [self.view addSubview:self.shadow];
 
     [self willRotateToInterfaceOrientation:self.interfaceOrientation duration:0];
-    [self.gridView reloadData];
+//    [self.gridView reloadData];
+    [self.issueTableView reloadData];
 
     #ifdef BAKER_NEWSSTAND
     self.refreshButton = [[[UIBarButtonItem alloc]
@@ -238,6 +256,9 @@
     int height = 0;
 
     NSString *image = @"";
+    NSString *shadowImage = @"shelf-shadow-bar.png";
+    NSString *cellBackgroundImage = @"cell-bg.png";
+    
     CGSize size = [UIScreen mainScreen].bounds.size;
 
     if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
@@ -263,8 +284,16 @@
 
     self.background.frame = CGRectMake(0, 0, width, height);
     self.background.image = [UIImage imageNamed:image];
+    
+    self.shadow.frame = CGRectMake(0, SHADOW_Y, width, SHADOW_HEIGHT);
+    self.shadow.image = [UIImage imageNamed:shadowImage];
+    
+    self.cellBackground.frame = CGRectMake(0, 0, 768, 291);
+    self.cellBackground.image = [UIImage imageNamed:cellBackgroundImage];
 
-    self.gridView.frame = CGRectMake(0, bannerHeight, width, height - bannerHeight);
+//    self.gridView.frame = CGRectMake(0, bannerHeight, width, height - bannerHeight);
+    self.issueTableView.frame = CGRectMake(0, bannerHeight, width, height - bannerHeight);
+    self.issueTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 - (IssueViewController *)createIssueViewControllerWithIssue:(BakerIssue *)issue
 {
@@ -274,36 +303,68 @@
 }
 
 #pragma mark - Shelf data source
+#warning 提供tableview数据
+//- (NSUInteger)numberOfItemsInGridView:(AQGridView *)aGridView
+//{
+//    return [issueViewControllers count];
+//}
+//- (AQGridViewCell *)gridView:(AQGridView *)aGridView cellForItemAtIndex:(NSUInteger)index
+//{
+//    CGSize cellSize = [IssueViewController getIssueCellSize];
+//    CGRect cellFrame = CGRectMake(0, 0, cellSize.width, cellSize.height);
+//
+//    static NSString *cellIdentifier = @"cellIdentifier";
+//    AQGridViewCell *cell = (AQGridViewCell *)[self.gridView dequeueReusableCellWithIdentifier:cellIdentifier];
+//	if (cell == nil)
+//	{
+//		cell = [[[AQGridViewCell alloc] initWithFrame:cellFrame reuseIdentifier:cellIdentifier] autorelease];
+//		cell.selectionStyle = AQGridViewCellSelectionStyleNone;
+//
+//        cell.contentView.backgroundColor = [UIColor clearColor];
+//        cell.backgroundColor = [UIColor clearColor];
+//        cell.backgroundView = self.cellBackground;
+//	}
+//
+//    IssueViewController *controller = [self.issueViewControllers objectAtIndex:index];
+//    UIView *removableIssueView = [cell.contentView viewWithTag:42];
+//    if (removableIssueView) {
+//        [removableIssueView removeFromSuperview];
+//    }
+//    [cell.contentView addSubview:controller.view];
+//
+//    return cell;
+//}
 
-- (NSUInteger)numberOfItemsInGridView:(AQGridView *)aGridView
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [issueViewControllers count];
+    return [issueViewControllers count] % 3 == 0 ? [issueViewControllers count] / 3 : [issueViewControllers count] / 3 + 1;
 }
-- (AQGridViewCell *)gridView:(AQGridView *)aGridView cellForItemAtIndex:(NSUInteger)index
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGSize cellSize = [IssueViewController getIssueCellSize];
-    CGRect cellFrame = CGRectMake(0, 0, cellSize.width, cellSize.height);
-
-    static NSString *cellIdentifier = @"cellIdentifier";
-    AQGridViewCell *cell = (AQGridViewCell *)[self.gridView dequeueReusableCellWithIdentifier:cellIdentifier];
-	if (cell == nil)
-	{
-		cell = [[[AQGridViewCell alloc] initWithFrame:cellFrame reuseIdentifier:cellIdentifier] autorelease];
-		cell.selectionStyle = AQGridViewCellSelectionStyleNone;
-
-        cell.contentView.backgroundColor = [UIColor clearColor];
-        cell.backgroundColor = [UIColor clearColor];
-	}
-
-    IssueViewController *controller = [self.issueViewControllers objectAtIndex:index];
-    UIView *removableIssueView = [cell.contentView viewWithTag:42];
-    if (removableIssueView) {
-        [removableIssueView removeFromSuperview];
+    static NSString *identifier = @"Cell";
+    
+    UICustomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    
+    if (!cell)
+    {
+        cell = [[UICustomTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                      reuseIdentifier:identifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    [cell.contentView addSubview:controller.view];
-
+    
+    IssueViewController *controller = [self.issueViewControllers objectAtIndex:indexPath.row * 3];
+    
+//    [cell addSubview:controller.view];
+    
     return cell;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 291;
+}
+
 - (CGSize)portraitGridCellSizeForGridView:(AQGridView *)aGridView
 {
     return [IssueViewController getIssueCellSize];
@@ -335,7 +396,8 @@
             if (!existingIvc || ![[existingIvc issue].ID isEqualToString:issue.ID]) {
                 IssueViewController *ivc = [self createIssueViewControllerWithIssue:issue];
                 [self.issueViewControllers insertObject:ivc atIndex:idx];
-                [self.gridView insertItemsAtIndices:[NSIndexSet indexSetWithIndex:idx] withAnimation:AQGridViewItemAnimationNone];
+//                [self.gridView insertItemsAtIndices:[NSIndexSet indexSetWithIndex:idx] withAnimation:AQGridViewItemAnimationNone];
+#warning 有新的书籍需要插入到这里
             } else {
                 existingIvc.issue = issue;
                 [existingIvc refreshContentWithCache:NO];
@@ -654,7 +716,7 @@
 + (int)getBannerHeight
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        return 240;
+        return SHADOW_Y;
     } else {
         return 104;
     }

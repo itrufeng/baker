@@ -121,58 +121,58 @@
     UIFont *archiveFont = [UIFont fontWithName:ISSUES_ARCHIVE_BUTTON_FONT size:ISSUES_ARCHIVE_BUTTON_FONT_SIZE];
 
     // SETUP TITLE LABEL
-    self.titleLabel = [[[UILabel alloc] init] autorelease];
-    titleLabel.textColor = [UIColor colorWithHexString:ISSUES_TITLE_COLOR];
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
-    titleLabel.textAlignment = UITextAlignmentLeft;
-    titleLabel.font = titleFont;
-
-    [self.view addSubview:titleLabel];
-
-    // SETUP INFO LABEL
-    self.infoLabel = [[[UILabel alloc] init] autorelease];
-    infoLabel.textColor = [UIColor colorWithHexString:ISSUES_INFO_COLOR];
-    infoLabel.backgroundColor = [UIColor clearColor];
-    infoLabel.lineBreakMode = UILineBreakModeTailTruncation;
-    infoLabel.textAlignment = UITextAlignmentLeft;
-    infoLabel.font = infoFont;
-
-    [self.view addSubview:infoLabel];
-
-    // SETUP PRICE LABEL
-    self.priceLabel = [[[UILabel alloc] init] autorelease];
-    priceLabel.textColor = [UIColor colorWithHexString:ISSUES_PRICE_COLOR];
-    priceLabel.backgroundColor = [UIColor clearColor];
-    priceLabel.lineBreakMode = UILineBreakModeTailTruncation;
-    priceLabel.textAlignment = UITextAlignmentLeft;
-    priceLabel.font = titleFont;
-
-    [self.view addSubview:priceLabel];
-
-    // SETUP ACTION BUTTON
-    self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    actionButton.backgroundColor = [UIColor colorWithHexString:ISSUES_ACTION_BUTTON_BACKGROUND_COLOR];
-    actionButton.titleLabel.font = actionFont;
-
-    [actionButton setTitle:NSLocalizedString(@"ACTION_DOWNLOADED_TEXT", nil) forState:UIControlStateNormal];
-    [actionButton setTitleColor:[UIColor colorWithHexString:ISSUES_ACTION_BUTTON_COLOR] forState:UIControlStateNormal];
-    [actionButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-
-    [self.view addSubview:actionButton];
-
-    // SETUP ARCHIVE BUTTON
-    self.archiveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    archiveButton.backgroundColor = [UIColor colorWithHexString:ISSUES_ARCHIVE_BUTTON_BACKGROUND_COLOR];
-    archiveButton.titleLabel.font = archiveFont;
-
-    [archiveButton setTitle:NSLocalizedString(@"ARCHIVE_TEXT", nil) forState:UIControlStateNormal];
-    [archiveButton setTitleColor:[UIColor colorWithHexString:ISSUES_ARCHIVE_BUTTON_COLOR] forState:UIControlStateNormal];
-    [archiveButton addTarget:self action:@selector(archiveButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-
-    #ifdef BAKER_NEWSSTAND
-    [self.view addSubview:archiveButton];
-    #endif
+//    self.titleLabel = [[[UILabel alloc] init] autorelease];
+//    titleLabel.textColor = [UIColor colorWithHexString:ISSUES_TITLE_COLOR];
+//    titleLabel.backgroundColor = [UIColor clearColor];
+//    titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
+//    titleLabel.textAlignment = UITextAlignmentLeft;
+//    titleLabel.font = titleFont;
+//
+//    [self.view addSubview:titleLabel];
+//
+//    // SETUP INFO LABEL
+//    self.infoLabel = [[[UILabel alloc] init] autorelease];
+//    infoLabel.textColor = [UIColor colorWithHexString:ISSUES_INFO_COLOR];
+//    infoLabel.backgroundColor = [UIColor clearColor];
+//    infoLabel.lineBreakMode = UILineBreakModeTailTruncation;
+//    infoLabel.textAlignment = UITextAlignmentLeft;
+//    infoLabel.font = infoFont;
+//
+//    [self.view addSubview:infoLabel];
+//
+//    // SETUP PRICE LABEL
+//    self.priceLabel = [[[UILabel alloc] init] autorelease];
+//    priceLabel.textColor = [UIColor colorWithHexString:ISSUES_PRICE_COLOR];
+//    priceLabel.backgroundColor = [UIColor clearColor];
+//    priceLabel.lineBreakMode = UILineBreakModeTailTruncation;
+//    priceLabel.textAlignment = UITextAlignmentLeft;
+//    priceLabel.font = titleFont;
+//
+//    [self.view addSubview:priceLabel];
+//
+//    // SETUP ACTION BUTTON
+//    self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    actionButton.backgroundColor = [UIColor colorWithHexString:ISSUES_ACTION_BUTTON_BACKGROUND_COLOR];
+//    actionButton.titleLabel.font = actionFont;
+//
+//    [actionButton setTitle:NSLocalizedString(@"ACTION_DOWNLOADED_TEXT", nil) forState:UIControlStateNormal];
+//    [actionButton setTitleColor:[UIColor colorWithHexString:ISSUES_ACTION_BUTTON_COLOR] forState:UIControlStateNormal];
+//    [actionButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//
+//    [self.view addSubview:actionButton];
+//
+//    // SETUP ARCHIVE BUTTON
+//    self.archiveButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    archiveButton.backgroundColor = [UIColor colorWithHexString:ISSUES_ARCHIVE_BUTTON_BACKGROUND_COLOR];
+//    archiveButton.titleLabel.font = archiveFont;
+//
+//    [archiveButton setTitle:NSLocalizedString(@"ARCHIVE_TEXT", nil) forState:UIControlStateNormal];
+//    [archiveButton setTitleColor:[UIColor colorWithHexString:ISSUES_ARCHIVE_BUTTON_COLOR] forState:UIControlStateNormal];
+//    [archiveButton addTarget:self action:@selector(archiveButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//
+//    #ifdef BAKER_NEWSSTAND
+//    [self.view addSubview:archiveButton];
+//    #endif
 
     // SETUP DOWN/LOADING SPINNER AND LABEL
     self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
@@ -675,7 +675,7 @@
 {
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        return CGSizeMake((screenRect.size.width - 2) / 2, [IssueViewController getIssueCellHeight]);
+        return CGSizeMake(209, [IssueViewController getIssueCellHeight]);
     } else {
         return CGSizeMake(screenRect.size.width - 2, [IssueViewController getIssueCellHeight]);
     }

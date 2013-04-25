@@ -73,6 +73,7 @@
         metrics = UIBarMetricsDefault;
     }
 
+    NSLog(@"[self backgroundImages]:%@", [self backgroundImages]);
     UIImage *image = [[self backgroundImages] objectForKey:[NSNumber numberWithInt:metrics]];
     if (!image && metrics != UIBarMetricsDefault) {
         image = [[self backgroundImages] objectForKey:[NSNumber numberWithInt:UIBarMetricsDefault]];

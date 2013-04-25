@@ -41,7 +41,7 @@
 #import "PurchasesManager.h"
 #endif
 
-@interface ShelfViewController : UIViewController <AQGridViewDataSource, AQGridViewDelegate, UIActionSheetDelegate> {
+@interface ShelfViewController : UIViewController <UIActionSheetDelegate, UITableViewDataSource, UITableViewDelegate> {
     BakerAPI *api;
     IssuesManager *issuesManager;
     NSMutableArray *notRecognisedTransactions;
@@ -57,8 +57,10 @@
 @property (retain, nonatomic) NSMutableArray *issueViewControllers;
 @property (retain, nonatomic) ShelfStatus *shelfStatus;
 
-@property (strong, nonatomic) AQGridView *gridView;
+//@property (strong, nonatomic) AQGridView *gridView;
+@property (strong, nonatomic) UITableView *issueTableView;
 @property (strong, nonatomic) UIImageView *background;
+@property (strong, nonatomic) UIImageView *shadow;
 @property (strong, nonatomic) UIBarButtonItem *refreshButton;
 @property (strong, nonatomic) UIBarButtonItem *subscribeButton;
 
@@ -67,6 +69,8 @@
 @property (strong, nonatomic) UIAlertView *blockingProgressView;
 
 @property (copy, nonatomic) NSString *bookToBeProcessed;
+
+@property (strong, nonatomic) UIImageView *cellBackground;
 
 #pragma mark - Init
 - (id)init;

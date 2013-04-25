@@ -43,13 +43,13 @@
     #ifdef BAKER_NEWSSTAND
 
         // Remove the following line once you complete the Newsstand setup below.
-        #warning Newsstand: Remember to set the AppStore/Newsstand constants and delete this line once you did it.
+        // Newsstand: Remember to set the AppStore/Newsstand constants and delete this line once you did it.
 
         // ----------------------------------------------------------------------------------------------------
         // Mandatory - This constant defines where the JSON file containing all the publications is located.
         // For more information on this file, see: https://github.com/Simbul/baker/wiki/Newsstand-shelf-JSON
         // E.g. @"http://example.com/shelf.json"
-        #define NEWSSTAND_MANIFEST_URL @"http://bakerframework.com/demo/shelf.json"
+        #define NEWSSTAND_MANIFEST_URL @"http://ent.appmars.com/prss/shelf.json"
 
         // ----------------------------------------------------------------------------------------------------
         // Optional - This constant specifies the URL to ping back when a user purchases an issue or a subscription.
