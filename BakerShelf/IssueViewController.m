@@ -118,7 +118,7 @@
     self.titleFont = [UIFont fontWithName:ISSUES_TITLE_FONT size:ISSUES_TITLE_FONT_SIZE];
     self.infoFont = [UIFont fontWithName:ISSUES_INFO_FONT size:ISSUES_INFO_FONT_SIZE];
     UIFont *actionFont = [UIFont fontWithName:ISSUES_ACTION_BUTTON_FONT size:ISSUES_ACTION_BUTTON_FONT_SIZE];
-    UIFont *archiveFont = [UIFont fontWithName:ISSUES_ARCHIVE_BUTTON_FONT size:ISSUES_ARCHIVE_BUTTON_FONT_SIZE];
+//    UIFont *archiveFont = [UIFont fontWithName:ISSUES_ARCHIVE_BUTTON_FONT size:ISSUES_ARCHIVE_BUTTON_FONT_SIZE];
 
     // SETUP TITLE LABEL
 //    self.titleLabel = [[[UILabel alloc] init] autorelease];
@@ -646,15 +646,15 @@
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         UI iPad = {
-            .cellPadding   = 30,
-            .thumbWidth    = 135,
-            .thumbHeight   = 180,
+            .cellPadding   = 0,
+            .thumbWidth    = 181,
+            .thumbHeight   = 233,
             .contentOffset = 184
         };
         return iPad;
     } else {
         UI iPhone = {
-            .cellPadding   = 22,
+            .cellPadding   = 0,
             .thumbWidth    = 87,
             .thumbHeight   = 116,
             .contentOffset = 128

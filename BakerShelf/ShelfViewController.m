@@ -353,9 +353,15 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    IssueViewController *controller = [self.issueViewControllers objectAtIndex:indexPath.row * 3];
+    NSInteger lastCount = [self.issueViewControllers count] % 3 ? [self.issueViewControllers count] % 3 : 3;
     
-//    [cell addSubview:controller.view];
+    lastCount = [self.issueViewControllers count] / 3 == indexPath.row ? lastCount : 3;
+    
+    NSRange subRange = NSMakeRange(indexPath.row * 3, lastCount);
+    
+    NSArray *subIssViewControllers = [self.issueViewControllers subarrayWithRange:subRange];
+    
+    cell.issueViewControllers = subIssViewControllers;
     
     return cell;
 }

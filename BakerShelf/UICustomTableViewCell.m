@@ -9,8 +9,9 @@
 #import "UICustomTableViewCell.h"
 
 #import "IssueViewController.h"
+#import "StatusView.h"
 
-@interface UICustomTableViewCell ()
+@interface UICustomTableViewCell () <StatusViewDelegate>
 
 // 整个背景
 @property (retain, nonatomic) UIImageView *backgroundImage;
@@ -26,9 +27,9 @@
 @property (retain, nonatomic) UIView *issue2;
 
 // 点击下载
-@property (retain, nonatomic) UIImageView *downloadImage0;
-@property (retain, nonatomic) UIImageView *downloadImage1;
-@property (retain, nonatomic) UIImageView *downloadImage2;
+@property (retain, nonatomic) StatusView *downloadImage0;
+@property (retain, nonatomic) StatusView *downloadImage1;
+@property (retain, nonatomic) StatusView *downloadImage2;
 
 @end
 
@@ -45,42 +46,43 @@
         
         // shadows
         _shadow0 = [[UIImageView alloc] initWithFrame:CGRectMake(55, 29, 209, 235)];
+        _shadow0.userInteractionEnabled = YES;
         _shadow0.image = [UIImage imageNamed:@"book-shadow.png"];
         [self addSubview:_shadow0];
         
         _shadow1 = [[UIImageView alloc] initWithFrame:CGRectMake(_shadow0.frame.origin.x + _shadow0.frame.size.width + 15, 29, 209, 235)];
+        _shadow1.userInteractionEnabled = YES;
         _shadow1.image = [UIImage imageNamed:@"book-shadow.png"];
         [self addSubview:_shadow1];
         
         _shadow2 = [[UIImageView alloc] initWithFrame:CGRectMake(_shadow1.frame.origin.x + _shadow1.frame.size.width + 15, 29, 209, 235)];
+        _shadow2.userInteractionEnabled = YES;
         _shadow2.image = [UIImage imageNamed:@"book-shadow.png"];
         [self addSubview:_shadow2];
         
         // issues
-        _issue0 = [[UIView alloc] initWithFrame:CGRectMake(_shadow0.frame.origin.x + 14, 29, 181, 233)];
-        _issue0.backgroundColor = [UIColor redColor];
-        [self addSubview:_issue0];
+        _issue0 = [[UIView alloc] initWithFrame:CGRectMake(14, 2, 181, 233)];
+        [_shadow0 addSubview:_issue0];
         
-        _issue1 = [[UIView alloc] initWithFrame:CGRectMake(_shadow1.frame.origin.x + 14, 29, 181, 233)];
-        _issue1.backgroundColor = [UIColor redColor];
-        [self addSubview:_issue1];
+        _issue1 = [[UIView alloc] initWithFrame:CGRectMake(14, 2, 181, 233)];
+        [_shadow1 addSubview:_issue1];
         
-        _issue2 = [[UIView alloc] initWithFrame:CGRectMake(_shadow2.frame.origin.x + 14, 29, 181, 233)];
-        _issue2.backgroundColor = [UIColor redColor];
-        [self addSubview:_issue2];
+        _issue2 = [[UIView alloc] initWithFrame:CGRectMake(14, 2, 181, 233)];
+        [_shadow2 addSubview:_issue2];
         
         // downloadImages
-        _downloadImage0 = [[UIImageView alloc] initWithFrame:CGRectMake(_issue0.frame.origin.x + 95, 28, 88, 88)];
-        _downloadImage0.image = [UIImage imageNamed:@"download-bg.png"];
-        [self addSubview:_downloadImage0];
+        _downloadImage0 = [[StatusView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
+        _downloadImage0.pro = 0.4f;
+        _downloadImage0.delegate = self;
+        [_shadow0 addSubview:_downloadImage0];
         
-        _downloadImage1 = [[UIImageView alloc] initWithFrame:CGRectMake(_issue1.frame.origin.x +95, 28, 88, 88)];
-        _downloadImage1.image = [UIImage imageNamed:@"download-bg.png"];
-        [self addSubview:_downloadImage1];
+        _downloadImage1 = [[StatusView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
+        _downloadImage0.delegate = self;
+        [_shadow1 addSubview:_downloadImage1];
         
-        _downloadImage2 = [[UIImageView alloc] initWithFrame:CGRectMake(_issue2.frame.origin.x + 95, 28, 88, 88)];
-        _downloadImage2.image = [UIImage imageNamed:@"download-bg.png"];
-        [self addSubview:_downloadImage2];
+        _downloadImage2 = [[StatusView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
+        _downloadImage0.delegate = self;
+        [_shadow2 addSubview:_downloadImage2];
     }
     return self;
 }
@@ -111,14 +113,69 @@
 {
     _issueViewControllers = issueViewControllers;
     
+    [self _clearsubViews:_issue0];
+    [self _clearsubViews:_issue1];
+    [self _clearsubViews:_issue2];
+    
     for (int i = 0, x = 0; i < [_issueViewControllers count]; i++, x+=209+30)
     {
-        CGRect frame = CGRectMake(x, 0, 209, 235);
+        CGRect frame = CGRectMake(0, 0, _issue0.frame.size.width, _issue0.frame.size.height);
         
-        if (<#condition#>) {
-            <#statements#>
+        IssueViewController *issueViewController = [_issueViewControllers objectAtIndex:i];
+        issueViewController.view.frame = frame;
+        
+        switch (i) {
+            case 0:
+            {
+                [_issue0 addSubview:issueViewController.view];
+                break;
+            }
+            case 1:
+            {
+                [_issue1 addSubview:issueViewController.view];
+                break;
+            }
+            case 2:
+            {
+                [_issue2 addSubview:issueViewController.view];
+                break;
+            }
+            default:
+            {
+                NSAssert(YES, @"只能出现3个issueViewController");
+                break;
+            }
         }
     }
+}
+
+- (void) _clearsubViews:(UIView *)view
+{
+    for (UIView *subView in view.subviews)
+    {
+        [subView removeFromSuperview];
+    }
+}
+
+#pragma mark - StatusViewDelegate -
+- (void) start:(StatusView *)status
+{
+    
+}
+
+- (void) pause:(StatusView *)status
+{
+    
+}
+
+- (void) goon:(StatusView *)status
+{
+    
+}
+
+- (void) end:(StatusView *)status
+{
+    
 }
 
 @end
