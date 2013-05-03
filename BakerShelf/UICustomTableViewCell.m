@@ -9,9 +9,8 @@
 #import "UICustomTableViewCell.h"
 
 #import "IssueViewController.h"
-#import "StatusView.h"
 
-@interface UICustomTableViewCell () <StatusViewDelegate>
+@interface UICustomTableViewCell ()
 
 // 整个背景
 @property (retain, nonatomic) UIImageView *backgroundImage;
@@ -25,11 +24,6 @@
 @property (retain, nonatomic) UIView *issue0;
 @property (retain, nonatomic) UIView *issue1;
 @property (retain, nonatomic) UIView *issue2;
-
-// 点击下载
-@property (retain, nonatomic) StatusView *downloadImage0;
-@property (retain, nonatomic) StatusView *downloadImage1;
-@property (retain, nonatomic) StatusView *downloadImage2;
 
 @end
 
@@ -61,28 +55,14 @@
         [self addSubview:_shadow2];
         
         // issues
-        _issue0 = [[UIView alloc] initWithFrame:CGRectMake(14, 2, 181, 233)];
+        _issue0 = [[UIView alloc] initWithFrame:CGRectMake(14, 0, 181, 233)];
         [_shadow0 addSubview:_issue0];
         
-        _issue1 = [[UIView alloc] initWithFrame:CGRectMake(14, 2, 181, 233)];
+        _issue1 = [[UIView alloc] initWithFrame:CGRectMake(14, 0, 181, 233)];
         [_shadow1 addSubview:_issue1];
         
-        _issue2 = [[UIView alloc] initWithFrame:CGRectMake(14, 2, 181, 233)];
+        _issue2 = [[UIView alloc] initWithFrame:CGRectMake(14, 0, 181, 233)];
         [_shadow2 addSubview:_issue2];
-        
-        // downloadImages
-        _downloadImage0 = [[StatusView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
-        _downloadImage0.pro = 0.4f;
-        _downloadImage0.delegate = self;
-        [_shadow0 addSubview:_downloadImage0];
-        
-        _downloadImage1 = [[StatusView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
-        _downloadImage0.delegate = self;
-        [_shadow1 addSubview:_downloadImage1];
-        
-        _downloadImage2 = [[StatusView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
-        _downloadImage0.delegate = self;
-        [_shadow2 addSubview:_downloadImage2];
     }
     return self;
 }
@@ -102,9 +82,6 @@
     [_shadow1 release];
     [_shadow2 release];
     [_issue0 release];
-    [_downloadImage0 release];
-    [_downloadImage1 release];
-    [_downloadImage2 release];
     
     [super dealloc];
 }
@@ -155,27 +132,6 @@
     {
         [subView removeFromSuperview];
     }
-}
-
-#pragma mark - StatusViewDelegate -
-- (void) start:(StatusView *)status
-{
-    
-}
-
-- (void) pause:(StatusView *)status
-{
-    
-}
-
-- (void) goon:(StatusView *)status
-{
-    
-}
-
-- (void) end:(StatusView *)status
-{
-    
 }
 
 @end

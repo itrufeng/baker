@@ -41,6 +41,14 @@
 #import "UIColor+Extensions.h"
 #import "Utils.h"
 
+#import "StatusView.h"
+
+@interface IssueViewController () <StatusViewDelegate>
+
+@property (strong, nonatomic) StatusView *statusview;
+
+@end
+
 @implementation IssueViewController
 
 #pragma mark - Synthesis
@@ -48,9 +56,6 @@
 @synthesize issue;
 @synthesize actionButton;
 @synthesize archiveButton;
-@synthesize progressBar;
-@synthesize spinner;
-@synthesize loadingLabel;
 @synthesize priceLabel;
 
 @synthesize issueCover;
@@ -60,6 +65,7 @@
 @synthesize infoLabel;
 
 @synthesize currentStatus;
+@synthesize statusview;
 
 #pragma mark - Init
 
@@ -117,84 +123,6 @@
     // SETUP USED FONTS
     self.titleFont = [UIFont fontWithName:ISSUES_TITLE_FONT size:ISSUES_TITLE_FONT_SIZE];
     self.infoFont = [UIFont fontWithName:ISSUES_INFO_FONT size:ISSUES_INFO_FONT_SIZE];
-    UIFont *actionFont = [UIFont fontWithName:ISSUES_ACTION_BUTTON_FONT size:ISSUES_ACTION_BUTTON_FONT_SIZE];
-//    UIFont *archiveFont = [UIFont fontWithName:ISSUES_ARCHIVE_BUTTON_FONT size:ISSUES_ARCHIVE_BUTTON_FONT_SIZE];
-
-    // SETUP TITLE LABEL
-//    self.titleLabel = [[[UILabel alloc] init] autorelease];
-//    titleLabel.textColor = [UIColor colorWithHexString:ISSUES_TITLE_COLOR];
-//    titleLabel.backgroundColor = [UIColor clearColor];
-//    titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
-//    titleLabel.textAlignment = UITextAlignmentLeft;
-//    titleLabel.font = titleFont;
-//
-//    [self.view addSubview:titleLabel];
-//
-//    // SETUP INFO LABEL
-//    self.infoLabel = [[[UILabel alloc] init] autorelease];
-//    infoLabel.textColor = [UIColor colorWithHexString:ISSUES_INFO_COLOR];
-//    infoLabel.backgroundColor = [UIColor clearColor];
-//    infoLabel.lineBreakMode = UILineBreakModeTailTruncation;
-//    infoLabel.textAlignment = UITextAlignmentLeft;
-//    infoLabel.font = infoFont;
-//
-//    [self.view addSubview:infoLabel];
-//
-//    // SETUP PRICE LABEL
-//    self.priceLabel = [[[UILabel alloc] init] autorelease];
-//    priceLabel.textColor = [UIColor colorWithHexString:ISSUES_PRICE_COLOR];
-//    priceLabel.backgroundColor = [UIColor clearColor];
-//    priceLabel.lineBreakMode = UILineBreakModeTailTruncation;
-//    priceLabel.textAlignment = UITextAlignmentLeft;
-//    priceLabel.font = titleFont;
-//
-//    [self.view addSubview:priceLabel];
-//
-//    // SETUP ACTION BUTTON
-//    self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    actionButton.backgroundColor = [UIColor colorWithHexString:ISSUES_ACTION_BUTTON_BACKGROUND_COLOR];
-//    actionButton.titleLabel.font = actionFont;
-//
-//    [actionButton setTitle:NSLocalizedString(@"ACTION_DOWNLOADED_TEXT", nil) forState:UIControlStateNormal];
-//    [actionButton setTitleColor:[UIColor colorWithHexString:ISSUES_ACTION_BUTTON_COLOR] forState:UIControlStateNormal];
-//    [actionButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-//
-//    [self.view addSubview:actionButton];
-//
-//    // SETUP ARCHIVE BUTTON
-//    self.archiveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    archiveButton.backgroundColor = [UIColor colorWithHexString:ISSUES_ARCHIVE_BUTTON_BACKGROUND_COLOR];
-//    archiveButton.titleLabel.font = archiveFont;
-//
-//    [archiveButton setTitle:NSLocalizedString(@"ARCHIVE_TEXT", nil) forState:UIControlStateNormal];
-//    [archiveButton setTitleColor:[UIColor colorWithHexString:ISSUES_ARCHIVE_BUTTON_COLOR] forState:UIControlStateNormal];
-//    [archiveButton addTarget:self action:@selector(archiveButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-//
-//    #ifdef BAKER_NEWSSTAND
-//    [self.view addSubview:archiveButton];
-//    #endif
-
-    // SETUP DOWN/LOADING SPINNER AND LABEL
-    self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
-    spinner.color = [UIColor colorWithHexString:ISSUES_LOADING_SPINNER_COLOR];
-    spinner.backgroundColor = [UIColor clearColor];
-    spinner.hidesWhenStopped = YES;
-
-    self.loadingLabel = [[[UILabel alloc] init] autorelease];
-    loadingLabel.textColor = [UIColor colorWithHexString:ISSUES_LOADING_LABEL_COLOR];
-    loadingLabel.backgroundColor = [UIColor clearColor];
-    loadingLabel.textAlignment = UITextAlignmentLeft;
-    loadingLabel.text = NSLocalizedString(@"DOWNLOADING_TEXT", nil);
-    loadingLabel.font = actionFont;
-
-    [self.view addSubview:spinner];
-    [self.view addSubview:loadingLabel];
-
-    // SETUP PROGRESS BAR
-    self.progressBar = [[[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault] autorelease];
-    self.progressBar.progressTintColor = [UIColor colorWithHexString:ISSUES_PROGRESSBAR_TINT_COLOR];
-
-    [self.view addSubview:progressBar];
 
     #ifdef BAKER_NEWSSTAND
     // RESUME PENDING NEWSSTAND DOWNLOAD
@@ -206,6 +134,11 @@
         }
     }
     #endif
+
+    // 
+    self.statusview = [[StatusView alloc] initWithFrame:CGRectMake(0, 0, 181, 233)];
+    statusview.delegate = self;
+    [self.view addSubview:statusview];
 
     [self refreshContentWithCache:NO];
 }
@@ -254,15 +187,6 @@
 
     // SETUP ARCHIVE BUTTON
     archiveButton.frame = CGRectMake(ui.contentOffset + 80 + 10, heightOffset, 80, 30);
-
-    // SETUP DOWN/LOADING SPINNER AND LABEL
-    spinner.frame = CGRectMake(ui.contentOffset, heightOffset, 30, 30);
-    self.loadingLabel.frame = CGRectMake(ui.contentOffset + self.spinner.frame.size.width + 10, heightOffset, 135, 30);
-
-    heightOffset = heightOffset + self.loadingLabel.frame.size.height + 5;
-
-    // SETUP PROGRESS BAR
-    self.progressBar.frame = CGRectMake(ui.contentOffset, heightOffset, 170, 30);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -282,78 +206,57 @@
         [self.priceLabel setText:NSLocalizedString(@"FREE_TEXT", nil)];
 
         [self.actionButton setTitle:NSLocalizedString(@"ACTION_REMOTE_TEXT", nil) forState:UIControlStateNormal];
-        [self.spinner stopAnimating];
 
         self.actionButton.hidden = NO;
         self.archiveButton.hidden = YES;
-        self.progressBar.hidden = YES;
-        self.loadingLabel.hidden = YES;
         self.priceLabel.hidden = NO;
+        statusview.downloadStatus = Nothing;
     }
     else if ([status isEqualToString:@"connecting"])
     {
         NSLog(@"[BakerShelf] '%@' is Connecting...", self.issue.ID);
-        [self.spinner startAnimating];
 
         self.actionButton.hidden = YES;
         self.archiveButton.hidden = YES;
-        self.progressBar.progress = 0;
-        self.loadingLabel.text = NSLocalizedString(@"CONNECTING_TEXT", nil);
-        self.loadingLabel.hidden = NO;
-        self.progressBar.hidden = YES;
         self.priceLabel.hidden = YES;
     }
     else if ([status isEqualToString:@"downloading"])
     {
         NSLog(@"[BakerShelf] '%@' is Downloading...", self.issue.ID);
-        [self.spinner startAnimating];
 
         self.actionButton.hidden = YES;
         self.archiveButton.hidden = YES;
-        self.progressBar.progress = 0;
-        self.loadingLabel.text = NSLocalizedString(@"DOWNLOADING_TEXT", nil);
-        self.loadingLabel.hidden = NO;
-        self.progressBar.hidden = NO;
         self.priceLabel.hidden = YES;
+        statusview.downloadStatus = Downloading;
     }
     else if ([status isEqualToString:@"downloaded"])
     {
         NSLog(@"[BakerShelf] '%@' is Ready to be Read.", self.issue.ID);
         [self.actionButton setTitle:NSLocalizedString(@"ACTION_DOWNLOADED_TEXT", nil) forState:UIControlStateNormal];
-        [self.spinner stopAnimating];
 
         self.actionButton.hidden = NO;
         self.archiveButton.hidden = NO;
-        self.loadingLabel.hidden = YES;
-        self.progressBar.hidden = YES;
         self.priceLabel.hidden = YES;
+        statusview.downloadStatus = Finished;
     }
     else if ([status isEqualToString:@"bundled"])
     {
         [self.actionButton setTitle:NSLocalizedString(@"ACTION_DOWNLOADED_TEXT", nil) forState:UIControlStateNormal];
-        [self.spinner stopAnimating];
 
         self.actionButton.hidden = NO;
         self.archiveButton.hidden = YES;
-        self.loadingLabel.hidden = YES;
-        self.progressBar.hidden = YES;
         self.priceLabel.hidden = YES;
     }
     else if ([status isEqualToString:@"opening"])
     {
-        [self.spinner startAnimating];
 
         self.actionButton.hidden = YES;
         self.archiveButton.hidden = YES;
-        self.loadingLabel.text = NSLocalizedString(@"OPENING_TEXT", nil);
-        self.loadingLabel.hidden = NO;
-        self.progressBar.hidden = YES;
         self.priceLabel.hidden = YES;
     }
     else if ([status isEqualToString:@"purchasable"])
     {
         [self.actionButton setTitle:NSLocalizedString(@"ACTION_BUY_TEXT", nil) forState:UIControlStateNormal];
-        [self.spinner stopAnimating];
 
         if (self.issue.price) {
             [self.priceLabel setText:self.issue.price];
@@ -361,21 +264,14 @@
 
         self.actionButton.hidden = NO;
         self.archiveButton.hidden = YES;
-        self.progressBar.hidden = YES;
-        self.loadingLabel.hidden = YES;
         self.priceLabel.hidden = NO;
     }
     else if ([status isEqualToString:@"purchasing"])
     {
         NSLog(@"[BakerShelf] '%@' is being Purchased...", self.issue.ID);
-        [self.spinner startAnimating];
-
-        self.loadingLabel.text = NSLocalizedString(@"BUYING_TEXT", nil);
 
         self.actionButton.hidden = YES;
         self.archiveButton.hidden = YES;
-        self.progressBar.hidden = YES;
-        self.loadingLabel.hidden = NO;
         self.priceLabel.hidden = NO;
     }
     else if ([status isEqualToString:@"purchased"])
@@ -384,24 +280,15 @@
         [self.priceLabel setText:NSLocalizedString(@"PURCHASED_TEXT", nil)];
 
         [self.actionButton setTitle:NSLocalizedString(@"ACTION_REMOTE_TEXT", nil) forState:UIControlStateNormal];
-        [self.spinner stopAnimating];
 
         self.actionButton.hidden = NO;
         self.archiveButton.hidden = YES;
-        self.progressBar.hidden = YES;
-        self.loadingLabel.hidden = YES;
         self.priceLabel.hidden = NO;
     }
     else if ([status isEqualToString:@"unpriced"])
     {
-        [self.spinner startAnimating];
-
-        self.loadingLabel.text = NSLocalizedString(@"RETRIEVING_TEXT", nil);
-
         self.actionButton.hidden = YES;
         self.archiveButton.hidden = YES;
-        self.progressBar.hidden = YES;
-        self.loadingLabel.hidden = NO;
         self.priceLabel.hidden = YES;
     }
 
@@ -417,9 +304,6 @@
     [issue release];
     [actionButton release];
     [archiveButton release];
-    [progressBar release];
-    [spinner release];
-    [loadingLabel release];
     [priceLabel release];
     [issueCover release];
     [titleFont release];
@@ -427,6 +311,7 @@
     [titleLabel release];
     [infoLabel release];
     [currentStatus release];
+    [statusview release];
 
     [super dealloc];
 }
@@ -566,8 +451,14 @@
         self.issue.transientStatus = BakerIssueTransientStatusDownloading;
         [self refresh];
     }
-    [self.progressBar setProgress:(bytesWritten / bytesExpected) animated:YES];
+//    [self.progressBar setProgress:(bytesWritten / bytesExpected) animated:YES];
+    
+    
+    statusview.pro = (bytesWritten / bytesExpected);
+    
+    NSLog(@"%f", (bytesWritten / bytesExpected));
 }
+
 - (void)handleDownloadFinished:(NSNotification *)notification {
     self.issue.transientStatus = BakerIssueTransientStatusNone;
     [self refresh];
@@ -579,6 +470,27 @@
 
     self.issue.transientStatus = BakerIssueTransientStatusNone;
     [self refresh];
+}
+
+#pragma mark - StatusViewDelegate
+- (void) start:(StatusView *)status
+{
+    [self download];
+}
+
+- (void) pause:(StatusView *)status
+{
+    
+}
+
+- (void) goon:(StatusView *)status
+{
+
+}
+
+- (void) end:(StatusView *)status
+{
+    [statusview removeFromSuperview];
 }
 
 #pragma mark - Newsstand archive management
