@@ -38,11 +38,12 @@
 #import "PageTitleLabel.h"
 #import "Utils.h"
 
+#import "ShelfViewController.h"
+
 #define INDEX_FILE_NAME         @"index.html"
 
 #define URL_OPEN_MODALLY        @"referrer=Baker"
 #define URL_OPEN_EXTERNAL       @"referrer=Safari"
-
 
 // SCREENSHOT
 #define MAX_SCREENSHOT_AFTER_CP  10
@@ -55,6 +56,7 @@
 @synthesize scrollView;
 @synthesize currPage;
 @synthesize currentPageNumber;
+@synthesize backButton;
 
 #pragma mark - INIT
 - (id)initWithBook:(BakerBook *)bakerBook {
@@ -136,7 +138,8 @@
 - (void)viewDidLoad {
 
     [super viewDidLoad];
-    self.navigationItem.title = book.title;
+    self.navigationItem.hidesBackButton = YES;
+    [self hiddenButtons];
 
 
     // ****** SCROLLVIEW INIT
@@ -168,6 +171,16 @@
         backgroundPathPortrait  = [book.path stringByAppendingPathComponent:backgroundPathPortrait];
         backgroundImagePortrait = [[UIImage imageWithContentsOfFile:backgroundPathPortrait] retain];
     }
+    
+    self.backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.backButton.tag = BUTTON_BACK;
+    self.backButton.frame = CGRectMake(14, 55, 50, 38);
+    [self.backButton setImage:[UIImage imageNamed:@"button_back.png"]
+                         forState:UIControlStateNormal];
+    [self.backButton addTarget:self
+                            action:@selector(onBack:)
+                  forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.view addSubview:self.backButton];
 }
 - (void)viewWillAppear:(BOOL)animated {
 
@@ -1683,8 +1696,10 @@
         if (hidden) {
             [sharedApplication setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
             [self performSelector:@selector(showNavigationBar) withObject:nil afterDelay:0.1];
+            self.backButton.hidden = NO;
         } else {
             [self hideBars:[NSNumber numberWithBool:YES]];
+            self.backButton.hidden = YES;
         }
 
         if(![indexViewController isDisabled]) {
@@ -1734,6 +1749,8 @@
     if(![indexViewController isDisabled]) {
         [indexViewController setIndexViewHidden:YES withAnimation:YES];
     }
+    
+    self.backButton.hidden = YES;
 }
 - (void)handleBookProtocol:(NSURL *)url
 {
@@ -1876,6 +1893,7 @@
     [prevPage release];
 
     [webViewBackground release];
+    [backButton release];
 
     [super dealloc];
 }
@@ -1924,6 +1942,30 @@
     } else {
         return NO;
     }
+}
+
+- (void) hiddenButtons
+{
+    for (UIView *view in self.navigationController.view.subviews)
+    {
+        if (view.tag == BUTTON_REFRESH || view.tag == BUTTON_SUBSCRIBE)
+        {
+            [view removeFromSuperview];
+        }
+    }
+}
+
+- (void) onBack:(UIButton *)button
+{
+    for (UIView *view in self.navigationController.view.subviews)
+    {
+        if (view.tag == BUTTON_BACK)
+        {
+            [view removeFromSuperview];
+        }
+    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

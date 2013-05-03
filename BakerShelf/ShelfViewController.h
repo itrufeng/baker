@@ -41,6 +41,9 @@
 #import "PurchasesManager.h"
 #endif
 
+#define BUTTON_REFRESH 714032
+#define BUTTON_SUBSCRIBE 714033
+
 @interface ShelfViewController : UIViewController <UIActionSheetDelegate, UITableViewDataSource, UITableViewDelegate> {
     BakerAPI *api;
     IssuesManager *issuesManager;
@@ -57,12 +60,13 @@
 @property (retain, nonatomic) NSMutableArray *issueViewControllers;
 @property (retain, nonatomic) ShelfStatus *shelfStatus;
 
-//@property (strong, nonatomic) AQGridView *gridView;
 @property (strong, nonatomic) UITableView *issueTableView;
 @property (strong, nonatomic) UIImageView *background;
 @property (strong, nonatomic) UIImageView *shadow;
 @property (strong, nonatomic) UIBarButtonItem *refreshButton;
 @property (strong, nonatomic) UIBarButtonItem *subscribeButton;
+@property (retain, nonatomic) UIButton *refreshButton1;
+@property (retain, nonatomic) UIButton *subscribeButton1;
 
 @property (strong, nonatomic) UIActionSheet *subscriptionsActionSheet;
 @property (strong, nonatomic) NSArray *subscriptionsActionSheetActions;

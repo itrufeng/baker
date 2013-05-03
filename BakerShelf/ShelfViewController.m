@@ -49,7 +49,6 @@
 
 @synthesize issues;
 @synthesize issueViewControllers;
-//@synthesize gridView;
 @synthesize issueTableView;
 @synthesize subscribeButton;
 @synthesize refreshButton;
@@ -60,6 +59,8 @@
 @synthesize bookToBeProcessed;
 @synthesize shadow;
 @synthesize cellBackground;
+@synthesize refreshButton1;
+@synthesize subscribeButton1;
 
 #pragma mark - Init
 
@@ -129,7 +130,6 @@
 
 - (void)dealloc
 {
-//    [gridView release];
     [issueViewControllers release];
     [issues release];
     [subscribeButton release];
@@ -141,6 +141,8 @@
     [issuesManager release];
     [notRecognisedTransactions release];
     [bookToBeProcessed release];
+    [refreshButton1 release];
+    [subscribeButton1 release];
 
     #ifdef BAKER_NEWSSTAND
     [purchasesManager release];
@@ -159,12 +161,7 @@
     self.cellBackground = [[UIImageView alloc] init];
 
     self.shadow = [[UIImageView alloc] init];
-    self.shadow.backgroundColor = [UIColor clearColor];
-    
-//    self.gridView = [[AQGridView alloc] init];
-//    self.gridView.dataSource = self;
-//    self.gridView.delegate = self;
-//    self.gridView.backgroundColor = [UIColor clearColor];
+//    self.shadow.backgroundColor = [UIColor redColor];
     
     self.issueTableView = [[UITableView alloc] init];
     self.issueTableView.dataSource = self;
@@ -172,12 +169,10 @@
     self.issueTableView.backgroundColor = [UIColor clearColor];
 
     [self.view addSubview:self.background];
-//    [self.view addSubview:self.gridView];
     [self.view addSubview:self.issueTableView];
     [self.view addSubview:self.shadow];
 
     [self willRotateToInterfaceOrientation:self.interfaceOrientation duration:0];
-//    [self.gridView reloadData];
     [self.issueTableView reloadData];
 
     #ifdef BAKER_NEWSSTAND
@@ -200,6 +195,25 @@
                                  delegate:nil
                                  cancelButtonTitle:nil
                                  otherButtonTitles:nil];
+    
+    self.refreshButton1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.refreshButton1.tag = BUTTON_REFRESH;
+    self.refreshButton1.frame = CGRectMake(14, 55, 50, 38);
+    [self.refreshButton1 setImage:[UIImage imageNamed:@"button_refresh.png"]
+                         forState:UIControlStateNormal];
+    [self.refreshButton1 addTarget:self
+                            action:@selector(handleRefresh:)
+                  forControlEvents:UIControlEventTouchUpInside];
+    
+    self.subscribeButton1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.subscribeButton1.tag = BUTTON_SUBSCRIBE;
+    self.subscribeButton1.frame = CGRectMake(75, 55, 110, 38);
+    [self.subscribeButton1 setImage:[UIImage imageNamed:@"button_subscribe.png"]
+                         forState:UIControlStateNormal];
+    [self.subscribeButton1 addTarget:self
+                            action:@selector(handleSubscribeButtonPressed:)
+                  forControlEvents:UIControlEventTouchUpInside];
+    
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     spinner.center = CGPointMake(139.5, 75.5); // .5 so it doesn't blur
     [self.blockingProgressView addSubview:spinner];
@@ -224,13 +238,24 @@
         [controller refresh];
     }
 
-    #ifdef BAKER_NEWSSTAND
-    NSMutableArray *buttonItems = [NSMutableArray arrayWithObject:self.refreshButton];
+//    #ifdef BAKER_NEWSSTAND
+//    NSMutableArray *buttonItems = [NSMutableArray arrayWithObject:self.refreshButton];
+//    if ([purchasesManager hasSubscriptions] || [issuesManager hasProductIDs]) {
+//        [buttonItems addObject:self.subscribeButton];
+//    }
+//    self.navigationItem.leftBarButtonItems = buttonItems;
+//    #endif
+
+    [self.navigationController.view addSubview:self.refreshButton1];
+    
     if ([purchasesManager hasSubscriptions] || [issuesManager hasProductIDs]) {
-        [buttonItems addObject:self.subscribeButton];
+        [self.navigationController.view addSubview:self.subscribeButton1];
     }
-    self.navigationItem.leftBarButtonItems = buttonItems;
-    #endif
+//    // 隐藏后退显示订阅和刷新
+//    self.refreshButton1.hidden = NO;
+//    if ([purchasesManager hasSubscriptions] || [issuesManager hasProductIDs]) {
+//        self.subscribeButton1.hidden = NO;
+//    }
 }
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -285,14 +310,14 @@
     self.background.frame = CGRectMake(0, 0, width, height);
     self.background.image = [UIImage imageNamed:image];
     
-    self.shadow.frame = CGRectMake(0, SHADOW_Y, width, SHADOW_HEIGHT);
+    self.shadow.frame = CGRectMake(0, SHADOW_Y - 50, width, SHADOW_HEIGHT);
     self.shadow.image = [UIImage imageNamed:shadowImage];
     
     self.cellBackground.frame = CGRectMake(0, 0, 768, 291);
     self.cellBackground.image = [UIImage imageNamed:cellBackgroundImage];
 
 //    self.gridView.frame = CGRectMake(0, bannerHeight, width, height - bannerHeight);
-    self.issueTableView.frame = CGRectMake(0, bannerHeight, width, height - bannerHeight);
+    self.issueTableView.frame = CGRectMake(0, bannerHeight - 50, width, height - bannerHeight + 50);
     self.issueTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 - (IssueViewController *)createIssueViewControllerWithIssue:(BakerIssue *)issue
@@ -302,38 +327,7 @@
     return controller;
 }
 
-#pragma mark - Shelf data source
-#warning 提供tableview数据
-//- (NSUInteger)numberOfItemsInGridView:(AQGridView *)aGridView
-//{
-//    return [issueViewControllers count];
-//}
-//- (AQGridViewCell *)gridView:(AQGridView *)aGridView cellForItemAtIndex:(NSUInteger)index
-//{
-//    CGSize cellSize = [IssueViewController getIssueCellSize];
-//    CGRect cellFrame = CGRectMake(0, 0, cellSize.width, cellSize.height);
-//
-//    static NSString *cellIdentifier = @"cellIdentifier";
-//    AQGridViewCell *cell = (AQGridViewCell *)[self.gridView dequeueReusableCellWithIdentifier:cellIdentifier];
-//	if (cell == nil)
-//	{
-//		cell = [[[AQGridViewCell alloc] initWithFrame:cellFrame reuseIdentifier:cellIdentifier] autorelease];
-//		cell.selectionStyle = AQGridViewCellSelectionStyleNone;
-//
-//        cell.contentView.backgroundColor = [UIColor clearColor];
-//        cell.backgroundColor = [UIColor clearColor];
-//        cell.backgroundView = self.cellBackground;
-//	}
-//
-//    IssueViewController *controller = [self.issueViewControllers objectAtIndex:index];
-//    UIView *removableIssueView = [cell.contentView viewWithTag:42];
-//    if (removableIssueView) {
-//        [removableIssueView removeFromSuperview];
-//    }
-//    [cell.contentView addSubview:controller.view];
-//
-//    return cell;
-//}
+#pragma mark - 提供tableview数据
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -403,7 +397,8 @@
                 IssueViewController *ivc = [self createIssueViewControllerWithIssue:issue];
                 [self.issueViewControllers insertObject:ivc atIndex:idx];
 //                [self.gridView insertItemsAtIndices:[NSIndexSet indexSetWithIndex:idx] withAnimation:AQGridViewItemAnimationNone];
-#warning 有新的书籍需要插入到这里
+//#warning 有新的书籍需要插入到这里
+                [self.issueTableView reloadData];
             } else {
                 existingIvc.issue = issue;
                 [existingIvc refreshContentWithCache:NO];

@@ -37,6 +37,7 @@
 #import "BakerBook.h"
 #import "BakerBookStatus.h"
 
+#define BUTTON_BACK 413269
 
 @class Downloader;
 
@@ -114,6 +115,7 @@
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) UIWebView *currPage;
 @property int currentPageNumber;
+@property (retain, nonatomic) UIButton *backButton;
 
 #pragma mark - INIT
 - (id)initWithBook:(BakerBook *)bakerBook;

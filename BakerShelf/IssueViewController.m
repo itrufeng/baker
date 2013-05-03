@@ -135,7 +135,7 @@
     }
     #endif
 
-    // 
+    // SETUP STATUS
     self.statusview = [[StatusView alloc] initWithFrame:CGRectMake(0, 0, 181, 233)];
     statusview.delegate = self;
     [self.view addSubview:statusview];
