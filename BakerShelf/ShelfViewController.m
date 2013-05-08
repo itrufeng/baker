@@ -332,7 +332,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [issueViewControllers count] % 3 == 0 ? [issueViewControllers count] / 3 : [issueViewControllers count] / 3 + 1;
+    return [self cellNumber] < 3 ? 3 : [self cellNumber];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -346,6 +346,12 @@
         cell = [[UICustomTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:identifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    
+    if (indexPath.row + 1 > [self cellNumber] &&
+        [self cellNumber] < 3)
+    {
+        return cell;
     }
     
     NSInteger lastCount = [self.issueViewControllers count] % 3 ? [self.issueViewControllers count] % 3 : 3;
@@ -369,6 +375,11 @@
 - (CGSize)portraitGridCellSizeForGridView:(AQGridView *)aGridView
 {
     return [IssueViewController getIssueCellSize];
+}
+
+- (int) cellNumber
+{
+    return [issueViewControllers count] % 3 == 0 ? [issueViewControllers count] / 3 : [issueViewControllers count] / 3 + 1;
 }
 
 #ifdef BAKER_NEWSSTAND

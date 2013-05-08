@@ -63,6 +63,11 @@
         
         _issue2 = [[UIView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
         [_shadow2 addSubview:_issue2];
+        
+        // init
+        _shadow0.hidden = YES;
+        _shadow1.hidden = YES;
+        _shadow2.hidden = YES;
     }
     return self;
 }
