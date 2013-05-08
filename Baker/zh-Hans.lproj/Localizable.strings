@@ -1,10 +1,10 @@
 
 // Shelf Navigation Title at the top of the main Issues List
-"SHELF_NAVIGATION_TITLE" = "Baker Shelf";
+"SHELF_NAVIGATION_TITLE" = "有道";
 
 // Products alert
-"PRODUCTS_REQUEST_FAILED_TITLE" = "Failure connecting to the App Store";
-"PRODUCTS_REQUEST_FAILED_CLOSE" = "Close";
+"PRODUCTS_REQUEST_FAILED_TITLE" = "App Store连接失败";
+"PRODUCTS_REQUEST_FAILED_CLOSE" = "关闭";
 
 // Subscription button
 "SUBSCRIBE_BUTTON_TEXT" = "Subscribe";
@@ -42,29 +42,29 @@
 "RESTORED_ISSUE_NOT_RECOGNISED_CLOSE" = "Close";
 
 // Download alert
-"DOWNLOAD_FAILED_TITLE" = "Download failed";
-"DOWNLOAD_FAILED_MESSAGE" = "The issue could not be downloaded";
-"DOWNLOAD_FAILED_CLOSE" = "Close";
+"DOWNLOAD_FAILED_TITLE" = "下载失败";
+"DOWNLOAD_FAILED_MESSAGE" = "这期刊物不能下载。";
+"DOWNLOAD_FAILED_CLOSE" = "关闭";
 
 // Connection alert
-"INTERNET_CONNECTION_UNAVAILABLE_TITLE" = "No Internet Connection";
-"INTERNET_CONNECTION_UNAVAILABLE_MESSAGE" = "An Internet connection is unavailable. Some features of this application require an active connection.";
-"INTERNET_CONNECTION_UNAVAILABLE_CLOSE" = "OK";
+"INTERNET_CONNECTION_UNAVAILABLE_TITLE" = "没有网络连接";
+"INTERNET_CONNECTION_UNAVAILABLE_MESSAGE" = "网络连接不可用，确保连接网络。";
+"INTERNET_CONNECTION_UNAVAILABLE_CLOSE" = "好";
 
 // Issue buttons
-"ACTION_REMOTE_TEXT" = "DOWNLOAD";
-"ACTION_DOWNLOADED_TEXT" = "READ";
-"ACTION_BUY_TEXT" = "BUY";
-"ARCHIVE_TEXT" = "ARCHIVE";
-"CONNECTING_TEXT" = "CONNECTING...";
-"DOWNLOADING_TEXT" = "DOWNLOADING ...";
-"OPENING_TEXT" = "Loading...";
-"BUYING_TEXT" = "BUYING...";
-"RETRIEVING_TEXT" = "UPDATING PRICE...";
+"ACTION_REMOTE_TEXT" = "下载";
+"ACTION_DOWNLOADED_TEXT" = "阅读";
+"ACTION_BUY_TEXT" = "购买";
+"ARCHIVE_TEXT" = "删除";
+"CONNECTING_TEXT" = "连接中...";
+"DOWNLOADING_TEXT" = "下载中 ...";
+"OPENING_TEXT" = "加载中...";
+"BUYING_TEXT" = "购买中...";
+"RETRIEVING_TEXT" = "更新价格中...";
 
 // Issue states
 "FREE_TEXT" = "免费";
-"PURCHASED_TEXT" = "PURCHASED";
+"PURCHASED_TEXT" = "购买";
 
 // Archiving alert
 "ARCHIVE_ALERT_TITLE" = "确认要删除这期刊物吗?";
@@ -73,13 +73,13 @@
 "ARCHIVE_ALERT_BUTTON_OK" = "删除";
 
 // Mail alert
-"MAILTO_ALERT_TITLE" = "Failure";
-"MAILTO_ALERT_MESSAGE" = "Your device doesn't support the sending of emails!";
-"MAILTO_ALERT_CLOSE" = "OK";
+"MAILTO_ALERT_TITLE" = "失败";
+"MAILTO_ALERT_MESSAGE" = "你的设备不支持Email,也许是没有设置邮件。";
+"MAILTO_ALERT_CLOSE" = "好";
 
 // Modal web view
-"WEB_MODAL_FAILURE_MESSAGE" = "Unable to connect.";
-"WEB_MODAL_CLOSE_BUTTON_TEXT" = "Back";
+"WEB_MODAL_FAILURE_MESSAGE" = "无法连接。";
+"WEB_MODAL_CLOSE_BUTTON_TEXT" = "返回";
 
 // Transaction recording alert
 "TRANSACTION_RECORDING_FAILED_TITLE" = "Could not confirm purchase with remote server";
@@ -87,9 +87,9 @@
 "TRANSACTION_RECORDING_FAILED_CLOSE" = "Close";
 
 // Issue opening failure alert
-"ISSUE_OPENING_FAILED_TITLE" = "Could not open issue";
-"ISSUE_OPENING_FAILED_MESSAGE" = "There was an error opening this issue. Try downloading it again or contact the publisher.";
-"ISSUE_OPENING_FAILED_CLOSE" = "Close";
+"ISSUE_OPENING_FAILED_TITLE" = "不能打开期刊";
+"ISSUE_OPENING_FAILED_MESSAGE" = "阅读期刊错误， 请尝试重新下载期刊。";
+"ISSUE_OPENING_FAILED_CLOSE" = "关闭";
 
 // Subscriptions
 // (These are just examples: you'll need to provide your own product IDs and names)
