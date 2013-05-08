@@ -132,6 +132,7 @@
 		0F6DA7C417324DB100BEB660 /* pause-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause-bg@2x.png"; sourceTree = "<group>"; };
 		0FA946681738F7FC00BE2073 /* status_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_bg.png; sourceTree = "<group>"; };
 		0FA946691738F7FC00BE2073 /* status_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "status_bg@2x.png"; sourceTree = "<group>"; };
+		0FCEB3CA173A52F40084F2B5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		20CC551E16AD346900DEFB5C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9F1FC71116500A47002C8277 /* navigation-bar-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation-bar-bg.png"; sourceTree = "<group>"; };
 		9F1FC71216500A47002C8277 /* navigation-bar-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation-bar-bg@2x.png"; sourceTree = "<group>"; };
@@ -595,6 +596,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"zh-Hans",
 			);
 			mainGroup = ABAFB57C15AB9A2E002FA498;
 			productRefGroup = ABAFB58815AB9A2E002FA498 /* Products */;
@@ -719,6 +721,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				20CC551E16AD346900DEFB5C /* en */,
+				0FCEB3CA173A52F40084F2B5 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
