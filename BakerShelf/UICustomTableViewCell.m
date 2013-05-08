@@ -96,6 +96,10 @@
     [self _clearsubViews:_issue1];
     [self _clearsubViews:_issue2];
     
+    _shadow0.hidden = YES;
+    _shadow1.hidden = YES;
+    _shadow2.hidden = YES;
+    
     for (int i = 0, x = 0; i < [_issueViewControllers count]; i++, x+=209+30)
     {
         CGRect frame = CGRectMake(0, 0, _issue0.frame.size.width, _issue0.frame.size.height);
@@ -107,16 +111,19 @@
             case 0:
             {
                 [_issue0 addSubview:issueViewController.view];
+                _shadow0.hidden = NO;
                 break;
             }
             case 1:
             {
                 [_issue1 addSubview:issueViewController.view];
+                _shadow1.hidden = NO;
                 break;
             }
             case 2:
             {
                 [_issue2 addSubview:issueViewController.view];
+                _shadow2.hidden = NO;
                 break;
             }
             default:
