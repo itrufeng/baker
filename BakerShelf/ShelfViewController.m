@@ -246,11 +246,13 @@
 //    self.navigationItem.leftBarButtonItems = buttonItems;
 //    #endif
 
+    #ifdef BAKER_NEWSSTAND
     [self.navigationController.view addSubview:self.refreshButton1];
     
     if ([purchasesManager hasSubscriptions] || [issuesManager hasProductIDs]) {
         [self.navigationController.view addSubview:self.subscribeButton1];
     }
+    #endif
 //    // 隐藏后退显示订阅和刷新
 //    self.refreshButton1.hidden = NO;
 //    if ([purchasesManager hasSubscriptions] || [issuesManager hasProductIDs]) {
@@ -316,7 +318,6 @@
     self.cellBackground.frame = CGRectMake(0, 0, 768, 291);
     self.cellBackground.image = [UIImage imageNamed:cellBackgroundImage];
 
-//    self.gridView.frame = CGRectMake(0, bannerHeight, width, height - bannerHeight);
     self.issueTableView.frame = CGRectMake(0, bannerHeight - 50, width, height - bannerHeight + 50);
     self.issueTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }

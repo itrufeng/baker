@@ -46,6 +46,8 @@
 @interface IssueViewController () <StatusViewDelegate>
 
 @property (strong, nonatomic) StatusView *statusview;
+@property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
+@property (strong, nonatomic) UIImageView *statusbar;
 
 @end
 
@@ -59,6 +61,7 @@
 @synthesize priceLabel;
 
 @synthesize issueCover;
+@synthesize issueCover2;
 @synthesize titleFont;
 @synthesize infoFont;
 @synthesize titleLabel;
@@ -66,6 +69,8 @@
 
 @synthesize currentStatus;
 @synthesize statusview;
+@synthesize longPress;
+@synthesize statusbar;
 
 #pragma mark - Init
 
@@ -117,8 +122,12 @@
     issueCover.layer.shouldRasterize = YES;
     issueCover.layer.rasterizationScale = [UIScreen mainScreen].scale;
     
-    [issueCover addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:issueCover];
+//    [issueCover addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:issueCover];
+    
+    self.issueCover2 = [[UIView alloc] initWithFrame:CGRectMake(ui.cellPadding, ui.cellPadding, ui.thumbWidth, ui.thumbHeight)];
+    issueCover2.backgroundColor = [UIColor colorWithHexString:ISSUES_COVER_BACKGROUND_COLOR];
+    [self.view addSubview:issueCover2];
 
     // SETUP USED FONTS
     self.titleFont = [UIFont fontWithName:ISSUES_TITLE_FONT size:ISSUES_TITLE_FONT_SIZE];
@@ -136,9 +145,39 @@
     #endif
 
     // SETUP STATUS
-    self.statusview = [[StatusView alloc] initWithFrame:CGRectMake(0, 0, 181, 233)];
+    self.statusview = [[StatusView alloc] initWithFrame:CGRectMake(0, -1, 181, 233)];
     statusview.delegate = self;
     [self.view addSubview:statusview];
+    
+#ifdef BAKER_NEWSSTAND
+    self.longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(actionLongPress:)];
+    longPress.numberOfTapsRequired = 1;
+    longPress.numberOfTouchesRequired = 1;
+    longPress.minimumPressDuration = 2;
+    [self.issueCover2 addGestureRecognizer:longPress];
+#endif
+
+#ifdef BAKER_NEWSSTAND
+    // status
+    statusbar = [[UIImageView alloc] initWithFrame:CGRectMake(0, 212, 181, 22)];
+    statusbar.image = [UIImage imageNamed:@"status_bg.png"];
+    [self.view addSubview:statusbar];
+    
+    titleLabel = [[UILabel alloc] init];
+    titleLabel.font = [UIFont fontWithName:@"Arial" size:12];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textColor = [UIColor whiteColor];
+    [self.view addSubview:titleLabel];
+    
+    priceLabel = [[UILabel alloc] init];
+    priceLabel.text = @"$0.99";
+    priceLabel.textAlignment = NSTextAlignmentRight;
+    priceLabel.font = [UIFont fontWithName:@"Arial" size:12];
+    priceLabel.backgroundColor = [UIColor clearColor];
+    priceLabel.textColor = [UIColor whiteColor];
+    [self.view addSubview:priceLabel];
+    
+#endif
 
     [self refreshContentWithCache:NO];
 }
@@ -156,7 +195,7 @@
     CGSize titleSize = [self.issue.title sizeWithFont:titleFont constrainedToSize:CGSizeMake(170, MAXFLOAT) lineBreakMode:UILineBreakModeWordWrap];
     uint titleLines = MIN(4, titleSize.height / textLineheight);
 
-    titleLabel.frame = CGRectMake(ui.contentOffset, heightOffset, 170, textLineheight * titleLines);
+    titleLabel.frame = CGRectMake(2, self.view.bounds.size.height - 18, 170, textLineheight * titleLines);
     titleLabel.numberOfLines = titleLines;
     titleLabel.text = self.issue.title;
 
@@ -173,7 +212,7 @@
     heightOffset = heightOffset + infoLabel.frame.size.height + 5;
 
     // SETUP PRICE LABEL
-    self.priceLabel.frame = CGRectMake(ui.contentOffset, heightOffset, 170, textLineheight);
+    self.priceLabel.frame = CGRectMake(2, self.view.bounds.size.height - 18, 178, textLineheight);
 
     heightOffset = heightOffset + priceLabel.frame.size.height + 10;
 
@@ -306,12 +345,14 @@
     [archiveButton release];
     [priceLabel release];
     [issueCover release];
+    [issueCover2 release];
     [titleFont release];
     [infoFont release];
     [titleLabel release];
     [infoLabel release];
     [currentStatus release];
     [statusview release];
+    [statusbar release];
 
     [super dealloc];
 }
@@ -335,6 +376,14 @@
     #endif
     }
 }
+
+#ifdef BAKER_NEWSSTAND
+- (void) actionLongPress:(UILongPressGestureRecognizer *)sender
+{
+    [self archiveButtonPressed:nil];
+}
+#endif
+
 #ifdef BAKER_NEWSSTAND
 - (void)download {
     [self.issue download];

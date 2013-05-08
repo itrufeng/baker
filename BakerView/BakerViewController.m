@@ -172,6 +172,7 @@
         backgroundImagePortrait = [[UIImage imageWithContentsOfFile:backgroundPathPortrait] retain];
     }
     
+    #ifdef BAKER_NEWSSTAND
     self.backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     self.backButton.tag = BUTTON_BACK;
     self.backButton.frame = CGRectMake(14, 55, 50, 38);
@@ -181,6 +182,7 @@
                             action:@selector(onBack:)
                   forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.view addSubview:self.backButton];
+    #endif
 }
 - (void)viewWillAppear:(BOOL)animated {
 

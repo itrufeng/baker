@@ -55,13 +55,13 @@
         [self addSubview:_shadow2];
         
         // issues
-        _issue0 = [[UIView alloc] initWithFrame:CGRectMake(14, 0, 181, 233)];
+        _issue0 = [[UIView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
         [_shadow0 addSubview:_issue0];
         
-        _issue1 = [[UIView alloc] initWithFrame:CGRectMake(14, 0, 181, 233)];
+        _issue1 = [[UIView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
         [_shadow1 addSubview:_issue1];
         
-        _issue2 = [[UIView alloc] initWithFrame:CGRectMake(14, 0, 181, 233)];
+        _issue2 = [[UIView alloc] initWithFrame:CGRectMake(14, 1, 181, 233)];
         [_shadow2 addSubview:_issue2];
     }
     return self;
@@ -82,6 +82,8 @@
     [_shadow1 release];
     [_shadow2 release];
     [_issue0 release];
+    [_issue1 release];
+    [_issue2 release];
     
     [super dealloc];
 }
