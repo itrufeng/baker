@@ -93,6 +93,8 @@
             _downloadImage.hidden = NO;
             _downloadingImage.hidden = YES;
             _proLabel.hidden = YES;
+            
+            _proLabel.text = @"0%";
             break;
         }
         case Downloading:

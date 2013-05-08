@@ -49,7 +49,6 @@
 @property (strong, nonatomic) UILabel *priceLabel;
 
 @property (strong, nonatomic) UIButton *issueCover;
-@property (strong, nonatomic) UIView *issueCover2;
 @property (strong, nonatomic) UIFont *titleFont;
 @property (strong, nonatomic) UIFont *infoFont;
 @property (strong, nonatomic) UILabel *titleLabel;

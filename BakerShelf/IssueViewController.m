@@ -47,6 +47,7 @@
 
 @property (strong, nonatomic) StatusView *statusview;
 @property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
+@property (strong, nonatomic) UITapGestureRecognizer *tap;
 @property (strong, nonatomic) UIImageView *statusbar;
 
 @end
@@ -61,7 +62,6 @@
 @synthesize priceLabel;
 
 @synthesize issueCover;
-@synthesize issueCover2;
 @synthesize titleFont;
 @synthesize infoFont;
 @synthesize titleLabel;
@@ -70,6 +70,7 @@
 @synthesize currentStatus;
 @synthesize statusview;
 @synthesize longPress;
+@synthesize tap;
 @synthesize statusbar;
 
 #pragma mark - Init
@@ -123,11 +124,7 @@
     issueCover.layer.rasterizationScale = [UIScreen mainScreen].scale;
     
 //    [issueCover addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:issueCover];
-    
-    self.issueCover2 = [[UIView alloc] initWithFrame:CGRectMake(ui.cellPadding, ui.cellPadding, ui.thumbWidth, ui.thumbHeight)];
-    issueCover2.backgroundColor = [UIColor colorWithHexString:ISSUES_COVER_BACKGROUND_COLOR];
-    [self.view addSubview:issueCover2];
+    [self.view addSubview:issueCover];
 
     // SETUP USED FONTS
     self.titleFont = [UIFont fontWithName:ISSUES_TITLE_FONT size:ISSUES_TITLE_FONT_SIZE];
@@ -151,10 +148,12 @@
     
 #ifdef BAKER_NEWSSTAND
     self.longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(actionLongPress:)];
-    longPress.numberOfTapsRequired = 1;
     longPress.numberOfTouchesRequired = 1;
-    longPress.minimumPressDuration = 2;
-    [self.issueCover2 addGestureRecognizer:longPress];
+    [self.issueCover addGestureRecognizer:longPress];
+    
+    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionButtonPressed:)];
+    tap.numberOfTouchesRequired = 1;
+    [self.issueCover addGestureRecognizer:tap];
 #endif
 
 #ifdef BAKER_NEWSSTAND
@@ -249,7 +248,9 @@
         self.actionButton.hidden = NO;
         self.archiveButton.hidden = YES;
         self.priceLabel.hidden = NO;
-        statusview.downloadStatus = Nothing;
+        
+        self.statusview.hidden = NO;
+        self.statusview.downloadStatus = Nothing;
     }
     else if ([status isEqualToString:@"connecting"])
     {
@@ -345,7 +346,6 @@
     [archiveButton release];
     [priceLabel release];
     [issueCover release];
-    [issueCover2 release];
     [titleFont release];
     [infoFont release];
     [titleLabel release];
@@ -353,6 +353,8 @@
     [currentStatus release];
     [statusview release];
     [statusbar release];
+    [longPress release];
+    [tap release];
 
     [super dealloc];
 }
@@ -380,7 +382,10 @@
 #ifdef BAKER_NEWSSTAND
 - (void) actionLongPress:(UILongPressGestureRecognizer *)sender
 {
-    [self archiveButtonPressed:nil];
+    if (sender.state == UIGestureRecognizerStateBegan)
+    {   
+        [self archiveButtonPressed:nil];
+    }
 }
 #endif
 
@@ -539,7 +544,7 @@
 
 - (void) end:(StatusView *)status
 {
-    [statusview removeFromSuperview];
+    statusview.hidden = YES;
 }
 
 #pragma mark - Newsstand archive management
