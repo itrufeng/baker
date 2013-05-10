@@ -435,7 +435,8 @@
     } else {
         [self.subscriptionsActionSheet release];
         self.subscriptionsActionSheet = [self buildSubscriptionsActionSheet];
-        [subscriptionsActionSheet showFromBarButtonItem:self.subscribeButton animated:YES];
+//        [subscriptionsActionSheet showFromBarButtonItem:self.subscribeButton animated:YES];
+        [subscriptionsActionSheet showFromRect:self.subscribeButton1.frame inView:self.view animated:YES];
     }
 }
 

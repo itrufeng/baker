@@ -112,12 +112,20 @@
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
     NSLog(@"############ REQUEST RECEIVED RESPONSE %@", response.products);
     
+    
+    
+    NSLog(@"request = %@",request);
     for (NSString *productID in response.invalidProductIdentifiers) {
         NSLog(@"Invalid product identifier: %@", productID);
+        
+        
+    
     }
     
     NSMutableSet *ids = [NSMutableSet setWithCapacity:response.products.count];
     for (SKProduct *skProduct in response.products) {
+
+        
         [self.products setObject:skProduct forKey:skProduct.productIdentifier];
         [ids addObject:skProduct.productIdentifier];
     }
