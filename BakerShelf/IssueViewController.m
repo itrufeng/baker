@@ -123,7 +123,6 @@
     issueCover.layer.shouldRasterize = YES;
     issueCover.layer.rasterizationScale = [UIScreen mainScreen].scale;
     
-//    [issueCover addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:issueCover];
 
     // SETUP USED FONTS
@@ -438,7 +437,7 @@
 
         self.issue.transientStatus = BakerIssueTransientStatusNone;
         [purchasesManager retrievePurchasesFor:[NSSet setWithObject:self.issue.productID]];
-        [self refresh];
+        [self refresh]; 
     }
 }
 - (void)handleIssuePurchaseFailed:(NSNotification *)notification {
@@ -458,6 +457,8 @@
         self.issue.transientStatus = BakerIssueTransientStatusNone;
         [self refresh];
     }
+    
+    self.statusview.downloadStatus = Nothing;
 }
 
 - (void)handleIssueRestored:(NSNotification *)notification {
@@ -529,7 +530,20 @@
 #pragma mark - StatusViewDelegate
 - (void) start:(StatusView *)status
 {
-    [self download];
+    NSString *issueStatus = [self.issue getStatus];
+    if ([issueStatus isEqualToString:@"remote"] || [issueStatus isEqualToString:@"purchased"]) {
+#ifdef BAKER_NEWSSTAND
+        [self download];
+#endif
+    } else if ([issueStatus isEqualToString:@"downloaded"] || [issueStatus isEqualToString:@"bundled"]) {
+        [self read];
+    } else if ([issueStatus isEqualToString:@"downloading"]) {
+        // TODO: assuming it is supported by NewsstandKit, implement a "Cancel" operation
+    } else if ([issueStatus isEqualToString:@"purchasable"]) {
+#ifdef BAKER_NEWSSTAND
+        [self buy];
+#endif
+    }
 }
 
 - (void) pause:(StatusView *)status
